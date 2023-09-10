@@ -1,6 +1,7 @@
 console.log('here is gsap lib', gsap)
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d')
+const scoreEl = document.querySelector('#scoreEl')
 console.log(context)
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
@@ -132,6 +133,7 @@ function spawnEnemies() {
 }
 
 let animationId
+let score = 0
 function animate() {
   //console.log(animate)
   animationId = requestAnimationFrame(animate)
@@ -187,7 +189,10 @@ function animate() {
             })
           )
         }
+        //where shrink enemy
         if (enemy.radious - 10 > 5) {
+          score += 10
+          scoreEl.innerHTML = score
           gsap.to(enemy, {
             radious: enemy.radious - 10,
           })
@@ -195,6 +200,9 @@ function animate() {
             projectilesArray.splice(projectileIndex, 1)
           }, 0)
         } else {
+          //remove enemy if is small
+          score += 100
+          scoreEl.innerHTML = score
           setTimeout(() => {
             console.log('remove from the screen')
             enemiesArray.splice(index, 1)

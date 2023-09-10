@@ -1,3 +1,11 @@
 body{
-margin: 0
+margin: 0;
+overflow: hidden;
+}
+.score{
+  position: absolute;
+  color: white;
+  padding: 8px;
+  font-family: sans-serif;
+  user-select: none;
 }
