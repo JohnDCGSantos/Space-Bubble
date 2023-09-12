@@ -9,135 +9,8 @@ const startBtn = document.querySelector('#startBtn')
 const startScreen = document.querySelector('.start-screen')
 
 console.log(context)
-
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
-
-class Player {
-  constructor(x, y, radious, color) {
-    this.x = x
-    this.y = y
-    this.radious = radious
-    this.color = color
-    this.velocity = {
-      x: 0,
-      y: 0,
-    }
-  }
-
-  draw() {
-    context.beginPath()
-    context.arc(this.x, this.y, this.radious, 0, Math.PI * 2, false)
-    context.fillStyle = this.color
-    context.fill()
-  }
-  update() {
-    this.draw()
-    const friction = 0.98
-    this.velocity.x *= friction
-    this.velocity.y *= friction
-    //colision detection player vs canvas x
-    if (
-      this.x + this.radious + this.velocity.x <= canvas.width &&
-      this.x - this.radious + this.velocity.x >= 0
-    ) {
-      this.x += this.velocity.x
-    } else {
-      this.velocity.x = 0
-    }
-    //colision detection player vs canvas y
-    if (
-      this.y + this.radious + this.velocity.y <= canvas.width &&
-      this.y - this.radious + this.velocity.y >= 0
-    ) {
-      this.y += this.velocity.y
-    } else {
-      this.velocity.y = 0
-    }
-  }
-}
-
-class Projectile {
-  constructor(x, y, radious, color, velocity) {
-    this.x = x
-    this.y = y
-    this.radious = radious
-    this.color = color
-    this.velocity = velocity
-  }
-  draw() {
-    context.beginPath()
-    context.arc(this.x, this.y, this.radious, 0, Math.PI * 2, false)
-    context.fillStyle = this.color
-    context.fill()
-  }
-  update() {
-    this.draw()
-    this.x = this.x + this.velocity.x
-    this.y = this.y + this.velocity.y
-  }
-}
-
-class Enemy {
-  constructor(x, y, radious, color, velocity) {
-    this.x = x
-    this.y = y
-    this.radious = radious
-    this.color = color
-    this.velocity = velocity
-    this.type = 'Linear'
-
-    if (Math.random() < 0.5) {
-      this.type = 'Traking'
-    }
-  }
-  draw() {
-    context.beginPath()
-    context.arc(this.x, this.y, this.radious, 0, Math.PI * 2, false)
-    context.fillStyle = this.color
-    context.fill()
-  }
-  update() {
-    this.draw()
-    if (this.type === 'Traking') {
-      const angle = Math.atan2(player.y - this.y, player.x - this.x)
-      this.velocity.x = Math.cos(angle)
-      this.velocity.y = Math.sin(angle)
-    }
-    this.x = this.x + this.velocity.x
-    this.y = this.y + this.velocity.y
-  }
-}
-
-const friction = 0.99
-class Particle {
-  constructor(x, y, radious, color, velocity) {
-    this.x = x
-    this.y = y
-    this.radious = radious
-    this.color = color
-    this.velocity = velocity
-    this.alpha = 1
-  }
-  draw() {
-    context.save()
-    context.globalAlpha = this.alpha
-    context.beginPath()
-    context.arc(this.x, this.y, this.radious, 0, Math.PI * 2, false)
-    context.fillStyle = this.color
-    context.fill()
-    context.restore()
-  }
-  update() {
-    this.draw()
-    this.velocity.x *= friction
-    this.velocity.y *= friction
-    this.x = this.x + this.velocity.x
-    this.y = this.y + this.velocity.y
-    this.alpha -= 0.01
-  }
-}
-
 const playerPositionX = canvas.width / 2
 const playerPositiony = canvas.height / 2
 
@@ -150,6 +23,10 @@ let particles = []
 let animationId
 let intervalId
 let score = 0
+let powerUp = new PowerUp({
+  x: 100,
+  y: 100,
+})
 
 function init() {
   player = new Player(playerPositionX, playerPositiony, 15, 'white')
@@ -197,7 +74,7 @@ function animate() {
 
   context.fillRect(0, 0, canvas.width, canvas.height)
   player.update()
-
+  powerUp.draw()
   for (let index = particles.length - 1; index >= 0; index--) {
     const particle = particles[index]
 
@@ -334,20 +211,30 @@ startBtn.addEventListener('click', () => {
   })
 })
 
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+  init()
+})
+
 window.addEventListener('keydown', event => {
   event.preventDefault()
   console.log(event.key)
   switch (event.key) {
     case 'ArrowRight':
+    case 'd':
       player.velocity.x += 1
       break
     case 'ArrowUp':
+    case 'w':
       player.velocity.y -= 1
       break
     case 'ArrowLeft':
+    case 'a':
       player.velocity.x -= 1
       break
     case 'ArrowDown':
+    case 's':
       player.velocity.y += 1
       break
   }
