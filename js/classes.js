@@ -8,6 +8,7 @@ class Player {
       x: 0,
       y: 0,
     }
+    this.PowerUp
   }
 
   draw() {
@@ -166,17 +167,60 @@ class Particle {
   }
 }
 
+class BackgroundParticle {
+  constructor({ position, radious = 3, color = 'blue' }) {
+    this.position = position
+    this.radious = radious
+    this.color = color
+    this.alpha = 0.1
+  }
+
+  draw() {
+    context.save()
+    context.globalAlpha = this.alpha
+    context.beginPath()
+    context.arc(this.position.x, this.position.y, this.radious, 0, Math.PI * 2)
+    context.fillStyle = this.color
+    context.fill()
+    context.restore()
+  }
+}
 class PowerUp {
   constructor({ position = { x: 0, y: 0 }, velocity }) {
     this.position = position
     this.velocity = velocity
     this.image = new Image()
-    this.image.src = './BlueBoss_1.png'
-    this.image.width = 50
-    this.image.height = 50
+    this.image.src = './BlueBoss.png'
+
+    this.alpha = 1
+    gsap.to(this, {
+      alpha: 0,
+      duration: 0.2,
+      repeat: -1,
+      yoyo: true,
+      ease: 'linear',
+    })
+    this.radians = 0
   }
 
   draw() {
-    context.drawImage(this.image, 100, 100, this.image.width, this.image.height)
+    context.save()
+    context.globalAlpha = this.alpha
+    context.translate(
+      this.position.x + this.image.width / 2,
+      this.position.y + this.image.height / 2
+    )
+    context.rotate(this.radians)
+    context.translate(
+      -this.position.x - this.image.width / 2,
+      -this.position.y - this.image.height / 2
+    )
+    context.drawImage(this.image, this.position.x, this.position.y)
+    context.restore()
+  }
+  update() {
+    this.draw()
+    this.radians += 0.01
+    this.position.x += this.velocity.x
   }
 }
