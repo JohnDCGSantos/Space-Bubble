@@ -32,9 +32,15 @@ let backgroundParticles = []
 let game = {
   active: false,
 }
+let touchStartX = null
+let touchStartY = null
+let shooting = false
+
 function init() {
   const playerPositionX = canvas.width / 2
   const playerPositiony = canvas.height / 2
+  shooting = false
+  isShooting = false
   player = new Player(playerPositionX, playerPositiony, 10, 'white')
   projectilesArray = []
   enemiesArray = []
@@ -92,7 +98,7 @@ function spawnEnemies() {
 
     enemiesArray.push(new Enemy(x, y, radious, color, velocity))
     //console.log('Enemies Array----->>>>>', enemiesArray)
-  }, 2000)
+  }, 1500)
 }
 
 function spawnPowerUps() {
@@ -336,12 +342,6 @@ window.addEventListener('click', event => {
   }
   shoot({ x: event.clientX, y: event.clientY })
 })
-window.addEventListener('touchstart', event => {
-  const x = event.touches[0].clientX
-  const y = event.touches[0].clientY
-
-  shoot({ x, y })
-})
 
 const mouse = {
   position: {
@@ -372,6 +372,7 @@ restart.addEventListener('click', () => {
 })
 
 startBtn.addEventListener('click', () => {
+  instructionsSection.style.display = 'none'
   audio.select.play()
   init()
   animate()
@@ -436,8 +437,51 @@ window.addEventListener('keydown', event => {
   }
 })
 
-// Function to handle touch events for player movement
-function handleTouchMove(event) {
+document.addEventListener('touchstart', event => {
+  if (game.active) {
+    const touch = event.touches[0]
+    touchStartX = touch.clientX
+    touchStartY = touch.clientY
+    isShooting = true
+    player.velocity.x = 0
+    player.velocity.y = 0
+  }
+})
+
+document.addEventListener('touchmove', event => {
+  if (touchStartX === null || touchStartY === null) {
+    return
+  }
+
+  const touch = event.touches[0]
+  const touchX = touch.clientX
+  const touchY = touch.clientY
+
+  const deltaX = touchX - touchStartX
+  const deltaY = touchY - touchStartY
+
+  player.x += deltaX * 1 // You can adjust the multiplier as needed for sensitivity
+  player.y += deltaY * 1
+  touchStartX = touchX
+  touchStartY = touchY
+})
+
+document.addEventListener('touchend', () => {
+  if (game.active) {
+    player.velocity.x = 0
+    player.velocity.y = 0
+
+    if (shooting && !isShooting) {
+      shoot({ x: player.x, y: player.y })
+      isShooting = true // Set the shooting flag
+    }
+  }
+})
+function resetShootingFlag() {
+  isShooting = false
+}
+
+/*function handleTouchMove(event) {
   if (touching) {
     const touchX = event.touches[0].clientX
     const touchY = event.touches[0].clientY
@@ -485,7 +529,7 @@ canvas.addEventListener('touchmove', handleTouchMove)
 
 canvas.addEventListener('touchend', () => {
   touching = false
-})
+})*/
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
@@ -498,7 +542,7 @@ document.addEventListener('visibilitychange', () => {
 instructionsBtn.addEventListener('click', () => {
   // Hide the start screen and show the instructions
   document.querySelector('.start-screen').style.display = 'none'
-  instructionsSection.style.display = 'block'
+  instructionsSection.style.display = 'flex'
 })
 
 // Event listener for the "Back to Start" button

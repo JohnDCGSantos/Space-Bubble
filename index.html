@@ -5,21 +5,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="style.css" </head>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="shortcut icon" href="favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+</head>
 
 <body>
   <div class='score'>
     <span> Score: <span id='scoreEl'>0</span></span>
   </div>
-  <div class="instructions">
-    <h2>How to Play</h2>
-    <p>Use the following arrows to control the player:</p>
-    <img src="Keyboard Black Corn.png" alt="Up Arrow" class="instruction-image">
-    <p>If you want, instead the arrows, you can use the following keys to control the player:</p>
-    <img src="Keyboard Black.png" alt="Down Arrow" class="Keyboard Black.png">
-    <button id="backToStartBtn">Back to Start</button>
-  </div>
 
+  <div class="instructions">
+    <div class="content">
+      <h2>How to Play</h2>
+
+      <p>Use the following arrow keys or the keys below to control the player around the game screen:</p>
+      <div>
+        <img src="Keyboard Black Corn.png" alt="Up Arrow" class="instruction-image">
+        <img src="Keyboard Black.png" alt="Down Arrow" class="Keyboard-Black">
+      </div>
+      <p>Click to shoot!</p>
+      <p>If you're on a touch device, just play with no limits on your touchscreen!</p>
+      <p>Catch the Drones to gain a PowerUp. After catching the PowerUp, try moving your mouse like crazy ;] !</p>
+      <div>
+        <img src="BlueBoss.png" alt="Boss" class="boss">
+      </div>
+      <p>You can mute or unmute game sounds by clicking on the icon in the top right corner.</p>
+      <p>Do your best to score by shooting enemies!</p>
+      <p>If you get hit by an enemy, you'll die... no mercy!</p>
+
+    </div>
+    <div class="back">
+      <button id="backToStartBtn">Back to Start</button>
+    </div>
+  </div>
   <div style="position: absolute; top: 0; right:0; padding:10px;cursor:pointer">
     <svg id="volumeUpElement" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="color:white; 
     width: 20px; 
@@ -40,9 +59,10 @@
 
   <div class="start-screen">
     <h1>Space Bubble</h1>
-
-    <button id="startBtn">Start Game !!</button>
-    <button id="instructionsBtn">How to Play</button>
+    <div clas="homeBtn">
+      <button id="startBtn">Start Game</button>
+      <button id="instructionsBtn">How to Play</button>
+    </div>
     <p>Let's play!!! By João Santos</p>
   </div>
   <div class="game-over">

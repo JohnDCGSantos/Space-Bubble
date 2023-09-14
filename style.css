@@ -48,7 +48,7 @@ overflow: hidden;
     
   }
   #startBtn{
-    margin-top: 12px;
+   
     padding: 8px;
     border-radius: 5px;
     width:150px ;
@@ -57,7 +57,7 @@ overflow: hidden;
     border: none;
     color:white;
     cursor:pointer;
-   margin-top: 150px;
+  
    font-size: 20px;
   }
 .game-over{
@@ -101,6 +101,78 @@ color: gray;
 }
 
 .instructions {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+ 
   
+
+}
+.instructions p, h2 {
+  color:white;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 0px;
+ 
+}
+.instructions  h2 {
+ 
+  margin-top: 5px;
+ 
+}
+
+img.instruction-image{
+  width:60px;
+  margin-right: 60px;
+ 
+}
+
+img.Keyboard-Black{
+  width:60px;
+  margin-left: 60px;
+
+}
+
+img.boss{
+  width:70px;
+  background-color: black;
+}
+
+.content{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 255, 0.7);
+  width:80%;
+  height:90%;
+  padding: 5px;
+}
+
+#backToStartBtn{
+  padding: 8px;
+  border-radius: 5px;
+  width:150px ;
+  height: 40px;
+  background-color: rgba(0, 0, 255, 0.7);
+  border: none;
+  color:white;
+  cursor:pointer;
+
+
+ font-size: 15px;
+
+}
+
+#instructionsBtn{
+  padding: 8px;
+  border-radius: 5px;
+  width:150px ;
+  height: 50px;
+  background-color: rgba(0, 0, 255, 0.7);
+  border: none;
+  color:white;
+  cursor:pointer;
+ 
+ font-size: 20px;
+
 }
