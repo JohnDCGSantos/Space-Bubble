@@ -7,13 +7,15 @@ const gameOverscoreEl = document.querySelector('#gameOverscoreEl')
 const restart = document.querySelector('#restBtn')
 const startBtn = document.querySelector('#startBtn')
 const startScreen = document.querySelector('.start-screen')
+const volumeUpEl = document.querySelector('#volumeUpElement')
+const volumeOffEl = document.querySelector('#volumeOfEl')
+
 //console.log(context)
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
-const playerPositionX = canvas.width / 2
-const playerPositiony = canvas.height / 2
+
 //console.log(player)
-let player = new Player(playerPositionX, playerPositiony, 15, 'white')
+let player
 let projectilesArray = []
 let enemiesArray = []
 let particles = []
@@ -24,8 +26,12 @@ let powerUps = []
 let spawnPowerUpsId
 let frames = 0
 let backgroundParticles = []
-
+let game = {
+  active: false,
+}
 function init() {
+  const playerPositionX = canvas.width / 2
+  const playerPositiony = canvas.height / 2
   player = new Player(playerPositionX, playerPositiony, 15, 'white')
   projectilesArray = []
   enemiesArray = []
@@ -36,9 +42,11 @@ function init() {
   scoreEl.innerHTML = 0
   frames = 0
   backgroundParticles = []
+  game = {
+    active: true,
+  }
   const spacing = 30
-  clearInterval(spawnPowerUpsId)
-  spawnPowerUpsId = null
+
   for (let x = 0; x < canvas.width + spacing; x += spacing) {
     for (let y = 0; y < canvas.height + spacing; y += spacing) {
       backgroundParticles.push(
@@ -52,6 +60,8 @@ function init() {
       )
     }
   }
+  clearInterval(spawnPowerUpsId)
+  spawnPowerUpsId = null
 }
 
 function spawnEnemies() {
@@ -107,7 +117,7 @@ function createScoreLabel({ position, score }) {
   scoreLabel.style.left = position.x + 'px'
   scoreLabel.style.top = position.y + 'px'
   scoreLabel.style.userSelect = 'none'
-
+  scoreLabel.style.pointerEvents = 'none'
   document.body.appendChild(scoreLabel)
 
   gsap.to(scoreLabel, {
@@ -119,6 +129,7 @@ function createScoreLabel({ position, score }) {
     },
   })
 }
+
 function animate() {
   //console.log(animate)
   animationId = requestAnimationFrame(animate)
@@ -143,23 +154,25 @@ function animate() {
       backgroundParticle.alpha -= 0.03
     }
   })
+
   player.update()
 
   for (let i = powerUps.length - 1; i >= 0; i--) {
     const powerUp = powerUps[i]
-
     if (powerUp.position.x > canvas.width) {
       powerUps.splice(i, 1)
     } else powerUp.update()
 
     const distance = Math.hypot(player.x - powerUp.position.x, player.y - powerUp.position.y)
+
+    //gain powerup
     if (distance < powerUp.image.height / 2 + player.radious) {
       //console.log('get it')
-
       //catch power up
       powerUps.splice(i, 1)
       player.powerUp = 'AutoGun'
       player.color = 'red'
+      audio.powerUp.play()
       //power up runs out
       setTimeout(() => {
         player.powerUp = null
@@ -174,8 +187,12 @@ function animate() {
       x: Math.cos(angle) * 4,
       y: Math.sin(angle) * 4,
     }
-    if (frames % 5 === 0)
+    if (frames % 5 === 0) {
       projectilesArray.push(new Projectile(player.x, player.y, 5, 'red', velocity))
+    }
+    if (frames % 10 === 0) {
+      audio.shoot.play()
+    }
   }
 
   for (let index = particles.length - 1; index >= 0; index--) {
@@ -204,14 +221,14 @@ function animate() {
   for (let index = enemiesArray.length - 1; index >= 0; index--) {
     const enemy = enemiesArray[index]
     enemy.update()
-
     const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
-
     //Game Over
     if (distance - enemy.radious - player.radious < 1) {
       console.log('Game Over')
       cancelAnimationFrame(animationId)
       clearInterval(intervalId)
+      audio.death.play()
+      game.active = false
       console.log(intervalId)
       gameOverEl.style.display = 'block'
       gsap.fromTo(
@@ -223,7 +240,6 @@ function animate() {
           ease: 'expo',
         }
       )
-
       gameOverscoreEl.innerHTML = score
     }
 
@@ -233,10 +249,8 @@ function animate() {
       projectileIndex--
     ) {
       const projectile = projectilesArray[projectileIndex]
-
       const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
       // console.log(distance)
-
       //when projectiles touch enemy
       if (distance - enemy.radious - projectile.radious < 1) {
         //Create explosions
@@ -250,6 +264,7 @@ function animate() {
         }
         //where shrink enemy
         if (enemy.radious - 10 > 5) {
+          audio.damage.play()
           score += 25
           scoreEl.innerHTML = score
           gsap.to(enemy, {
@@ -264,6 +279,7 @@ function animate() {
           })
           projectilesArray.splice(projectileIndex, 1)
         } else {
+          audio.kill.play()
           //remove enemy if is small
           score += 100
           scoreEl.innerHTML = score
@@ -294,16 +310,33 @@ function animate() {
 }
 
 //events
+let audioInitialized = false
 
+function shoot({ x, y }) {
+  if (game.active) {
+    const angle = Math.atan2(y - player.y, x - player.x)
+    //console.log(angle)
+    const velocity = {
+      x: Math.cos(angle) * 4,
+      y: Math.sin(angle) * 4,
+    }
+    projectilesArray.push(new Projectile(player.x, player.y, 5, 'white', velocity))
+    audio.shoot.play()
+  }
+}
 window.addEventListener('click', event => {
   //console.log(projectilesArray)
-  const angle = Math.atan2(event.clientY - player.y, event.clientX - player.x)
-  //console.log(angle)
-  const velocity = {
-    x: Math.cos(angle) * 4,
-    y: Math.sin(angle) * 4,
+  if (!audio.background.playing() && !audioInitialized) {
+    audio.background.play()
+    audioInitialized = true
   }
-  projectilesArray.push(new Projectile(player.x, player.y, 5, 'white', velocity))
+  shoot({ x: event.clientX, y: event.clientY })
+})
+window.addEventListener('touchstart', event => {
+  const x = event.touches[0].clientX
+  const y = event.touches[0].clientY
+
+  shoot({ x, y })
 })
 
 const mouse = {
@@ -318,6 +351,7 @@ window.addEventListener('mousemove', event => {
 })
 
 restart.addEventListener('click', () => {
+  audio.select.play()
   init()
   animate()
   spawnEnemies()
@@ -334,6 +368,7 @@ restart.addEventListener('click', () => {
 })
 
 startBtn.addEventListener('click', () => {
+  audio.select.play()
   init()
   animate()
   spawnEnemies()
@@ -354,7 +389,25 @@ window.addEventListener('resize', () => {
   canvas.height = window.innerHeight
   init()
 })
+//mute all
+volumeUpEl.addEventListener('click', () => {
+  console.log('clicked')
+  audio.background.pause()
+  volumeOffEl.style.display = 'block'
+  volumeUpEl.style.display = 'none'
+  for (let key in audio) {
+    audio[key].mute(true)
+  }
+})
 
+volumeOffEl.addEventListener('click', () => {
+  if (audioInitialized) audio.background.play()
+  volumeOffEl.style.display = 'none'
+  volumeUpEl.style.display = 'block'
+  for (let key in audio) {
+    audio[key].mute(false)
+  }
+})
 window.addEventListener('keydown', event => {
   event.preventDefault()
   console.log(event.key)
@@ -376,4 +429,55 @@ window.addEventListener('keydown', event => {
       player.velocity.y += 1
       break
   }
+})
+
+// Function to handle touch events for player movement
+function handleTouchMove(event) {
+  if (touching) {
+    const touchX = event.touches[0].clientX
+    const touchY = event.touches[0].clientY
+
+    // Calculate the distance from the player's center to the touch position
+    const distance = Math.hypot(touchX - player.x, touchY - player.y)
+
+    // Define a radius within which the player will move
+    const moveRadius = 50 // Adjust this value as needed
+
+    if (distance <= moveRadius) {
+      // Move the player to the touch position
+      player.x = touchX
+      player.y = touchY
+    } else {
+      // Touch elsewhere, trigger shooting
+      shoot({ x: touchX, y: touchY })
+    }
+  }
+}
+
+// Touch events for player movement and shooting (mobile)
+canvas.addEventListener('touchstart', event => {
+  const touchX = event.touches[0].clientX
+  const touchY = event.touches[0].clientY
+  const touchRadius = 30 // Adjust this value as needed
+
+  // Check if the touch is within the player's current position plus a radius
+  if (
+    touchX >= player.x - touchRadius &&
+    touchX <= player.x + touchRadius &&
+    touchY >= player.y - touchRadius &&
+    touchY <= player.y + touchRadius
+  ) {
+    touching = true
+  } else {
+    // Touch elsewhere, trigger shooting
+    shoot({ x: touchX, y: touchY })
+  }
+
+  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+})
+
+canvas.addEventListener('touchmove', handleTouchMove)
+
+canvas.addEventListener('touchend', () => {
+  touching = false
 })

@@ -17,6 +17,7 @@ class Player {
     context.fillStyle = this.color
     context.fill()
   }
+
   update() {
     this.draw()
     const friction = 0.98
@@ -51,12 +52,14 @@ class Projectile {
     this.color = color
     this.velocity = velocity
   }
+
   draw() {
     context.beginPath()
     context.arc(this.x, this.y, this.radious, 0, Math.PI * 2, false)
     context.fillStyle = this.color
     context.fill()
   }
+
   update() {
     this.draw()
     this.x = this.x + this.velocity.x
@@ -72,7 +75,6 @@ class Enemy {
     this.color = color
     this.velocity = velocity
     this.type = 'Linear'
-
     this.radians = 0
     this.center = {
       x,
@@ -185,6 +187,7 @@ class BackgroundParticle {
     context.restore()
   }
 }
+
 class PowerUp {
   constructor({ position = { x: 0, y: 0 }, velocity }) {
     this.position = position
