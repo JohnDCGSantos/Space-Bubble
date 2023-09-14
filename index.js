@@ -439,12 +439,11 @@ window.addEventListener('keydown', event => {
 window.addEventListener('touchstart', event => {
   event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
-  if (game.active) {
-    /*const touch = event.touches[0]
+  /*if (game.active) {
+    const touch = event.touches[0]
     touchStartX = touch.clientX
-    touchStartY = touch.clientY*/
-    const x = event.touches[0].clientX
-    const y = event.touches[0].clientY
+    touchStartY = touch.clientY
+    
     player.velocity.x = 0
     player.velocity.y = 0
 
@@ -454,11 +453,11 @@ window.addEventListener('touchstart', event => {
       isShooting = true // Set the shooting flag
     }
   }
-})
-/*const x = event.touches[0].clientX
+})*/
+  const x = event.touches[0].clientX
   const y = event.touches[0].clientY
   shoot({ x, y })
-})*/
+})
 
 window.addEventListener('touchmove', event => {
   event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
