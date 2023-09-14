@@ -9,6 +9,9 @@ const startBtn = document.querySelector('#startBtn')
 const startScreen = document.querySelector('.start-screen')
 const volumeUpEl = document.querySelector('#volumeUpElement')
 const volumeOffEl = document.querySelector('#volumeOfEl')
+const instructionsBtn = document.getElementById('instructionsBtn')
+const instructionsSection = document.querySelector('.instructions')
+const backToStartBtn = document.getElementById('backToStartBtn')
 
 //console.log(context)
 canvas.width = window.innerWidth
@@ -32,7 +35,7 @@ let game = {
 function init() {
   const playerPositionX = canvas.width / 2
   const playerPositiony = canvas.height / 2
-  player = new Player(playerPositionX, playerPositiony, 15, 'white')
+  player = new Player(playerPositionX, playerPositiony, 10, 'white')
   projectilesArray = []
   enemiesArray = []
   particles = []
@@ -123,7 +126,7 @@ function createScoreLabel({ position, score }) {
   gsap.to(scoreLabel, {
     opacity: 0,
     y: -30,
-    duration: 1,
+    duration: 2,
     onComplete: () => {
       scoreLabel.parentNode.removeChild(scoreLabel)
     },
@@ -491,4 +494,16 @@ document.addEventListener('visibilitychange', () => {
   } else {
     spawnEnemies()
   }
+})
+instructionsBtn.addEventListener('click', () => {
+  // Hide the start screen and show the instructions
+  document.querySelector('.start-screen').style.display = 'none'
+  instructionsSection.style.display = 'block'
+})
+
+// Event listener for the "Back to Start" button
+backToStartBtn.addEventListener('click', () => {
+  // Hide the instructions and show the start screen
+  instructionsSection.style.display = 'none'
+  document.querySelector('.start-screen').style.display = 'flex'
 })
