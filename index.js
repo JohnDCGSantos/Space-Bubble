@@ -334,6 +334,7 @@ function shoot({ x, y }) {
     audio.shoot.play()
   }
 }
+
 window.addEventListener('click', event => {
   //console.log(projectilesArray)
   if (!audio.background.playing() && !audioInitialized) {
@@ -437,7 +438,53 @@ window.addEventListener('keydown', event => {
   }
 })
 
-document.addEventListener('touchstart', event => {
+window.addEventListener('touchstart', event => {
+  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+
+  if (game.active) {
+    const touch = event.touches[0]
+    touchStartX = touch.clientX
+    touchStartY = touch.clientY
+    player.velocity.x = 0
+    player.velocity.y = 0
+
+    // Handle shooting
+    if (shooting && !isShooting) {
+      shoot({ x: player.x, y: player.y })
+      isShooting = true // Set the shooting flag
+    }
+  }
+})
+
+window.addEventListener('touchmove', event => {
+  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+
+  if (touchStartX === null || touchStartY === null) {
+    return
+  }
+
+  const touch = event.touches[0]
+  const touchX = touch.clientX
+  const touchY = touch.clientY
+
+  const deltaX = touchX - touchStartX
+  const deltaY = touchY - touchStartY
+
+  player.x += deltaX * 1 // Adjust the multiplier as needed for sensitivity
+  player.y += deltaY * 1
+  touchStartX = touchX
+  touchStartY = touchY
+})
+
+window.addEventListener('touchend', event => {
+  if (game.active) {
+    player.velocity.x = 0
+    player.velocity.y = 0
+    isShooting = false // Reset the shooting flag
+  }
+})
+
+/*window.addEventListener('touchstart', event => {
   event.preventDefault()
   if (game.active) {
     const touch = event.touches[0]
@@ -479,7 +526,7 @@ document.addEventListener('touchend', event => {
 })
 function resetShootingFlag() {
   isShooting = false
-}
+}*/
 
 /*function handleTouchMove(event) {
   if (touching) {
