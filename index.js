@@ -437,7 +437,7 @@ window.addEventListener('keydown', event => {
 })
 
 window.addEventListener('touchstart', event => {
-  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+  //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
   /*if (game.active) {
     const touch = event.touches[0]
