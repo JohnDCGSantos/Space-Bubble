@@ -435,7 +435,46 @@ window.addEventListener('keydown', event => {
       break
   }
 })
-window.addEventListener('touchstart', event => {
+window.addEventListener('touchmove', event => {
+  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+
+  // Capture the touch position
+  const touch = event.touches[0]
+  const touchX = touch.clientX
+  const touchY = touch.clientY
+
+  // Handle shooting
+  if (shooting && !isShooting) {
+    const x = touchX // Use the current touch position for shooting
+    const y = touchY
+    shoot({ x, y })
+    isShooting = true // Set the shooting flag
+  }
+
+  // Calculate the change in touch position for player movement
+  if (touchStartX === null || touchStartY === null) {
+    touchStartX = touchX
+    touchStartY = touchY
+    return
+  }
+
+  const deltaX = touchX - touchStartX
+  const deltaY = touchY - touchStartY
+
+  // Update player position based on touch movement (adjust the multiplier as needed)
+  player.x += deltaX * 1
+  player.y += deltaY * 1
+
+  // Update the initial touch position for the next move event
+  touchStartX = touchX
+  touchStartY = touchY
+})
+
+window.addEventListener('touchend', event => {
+  // Reset the shooting flag when the touch ends
+  isShooting = false
+})
+/*window.addEventListener('touchstart', event => {
   //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
   // Capture the initial touch position
@@ -479,7 +518,7 @@ window.addEventListener('touchmove', event => {
 window.addEventListener('touchend', event => {
   // Reset the shooting flag when the touch ends
   isShooting = false
-})
+})*/
 /*window.addEventListener('touchstart', event => {
   //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
