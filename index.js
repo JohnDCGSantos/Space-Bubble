@@ -435,11 +435,55 @@ window.addEventListener('keydown', event => {
       break
   }
 })
-
 window.addEventListener('touchstart', event => {
   //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
-  /*if (game.active) {
+  // Capture the initial touch position
+  const touch = event.touches[0]
+  touchStartX = touch.clientX
+  touchStartY = touch.clientY
+
+  // Handle shooting
+  if (shooting && !isShooting) {
+    const x = touchStartX // Use the initial touch position for shooting
+    const y = touchStartY
+    shoot({ x, y })
+    isShooting = true // Set the shooting flag
+  }
+})
+
+window.addEventListener('touchmove', event => {
+  //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+
+  if (touchStartX === null || touchStartY === null) {
+    return
+  }
+
+  // Calculate the change in touch position for player movement
+  const touch = event.touches[0]
+  const touchX = touch.clientX
+  const touchY = touch.clientY
+
+  const deltaX = touchX - touchStartX
+  const deltaY = touchY - touchStartY
+
+  // Update player position based on touch movement (adjust the multiplier as needed)
+  player.x += deltaX * 1
+  player.y += deltaY * 1
+
+  // Update the initial touch position for the next move event
+  touchStartX = touchX
+  touchStartY = touchY
+})
+
+window.addEventListener('touchend', event => {
+  // Reset the shooting flag when the touch ends
+  isShooting = false
+})
+/*window.addEventListener('touchstart', event => {
+  //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+
+  if (game.active) {
     const touch = event.touches[0]
     touchStartX = touch.clientX
     touchStartY = touch.clientY
@@ -454,10 +498,11 @@ window.addEventListener('touchstart', event => {
     }
   }
 })*/
-  const x = event.touches[0].clientX
+
+/*const x = event.touches[0].clientX
   const y = event.touches[0].clientY
   shoot({ x, y })
-})
+})*/
 
 /*window.addEventListener('touchmove', event => {
   event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
