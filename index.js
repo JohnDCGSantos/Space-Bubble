@@ -35,7 +35,7 @@ let game = {
 let touchStartX = null
 let touchStartY = null
 let shooting = false
-
+let isShooting
 function init() {
   const playerPositionX = canvas.width / 2
   const playerPositiony = canvas.height / 2
