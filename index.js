@@ -12,11 +12,9 @@ const volumeOffEl = document.querySelector('#volumeOfEl')
 const instructionsBtn = document.getElementById('instructionsBtn')
 const instructionsSection = document.querySelector('.instructions')
 const backToStartBtn = document.getElementById('backToStartBtn')
-
 //console.log(context)
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
-
 //console.log(player)
 let player
 let projectilesArray = []
@@ -239,7 +237,7 @@ function animate() {
       clearInterval(spawnPowerUpsId)
       audio.death.play()
       game.active = false
-      console.log(intervalId)
+      //console.log(intervalId)
       gameOverEl.style.display = 'block'
       gsap.fromTo(
         '.game-over',
@@ -441,19 +439,19 @@ window.addEventListener('keydown', event => {
 window.addEventListener('touchstart', event => {
   event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
-  if (game.active) {
-    const touch = event.touches[0]
-    touchStartX = touch.clientX
-    touchStartY = touch.clientY
-    player.velocity.x = 0
-    player.velocity.y = 0
+  //if (game.active) {
+  const touch = event.touches[0]
+  touchStartX = touch.clientX
+  touchStartY = touch.clientY
+  player.velocity.x = 0
+  player.velocity.y = 0
 
-    // Handle shooting
-    if (shooting && !isShooting) {
-      shoot({ x: player.x, y: player.y })
-      isShooting = true // Set the shooting flag
-    }
+  // Handle shooting
+  if (shooting && !isShooting) {
+    shoot({ x: player.x, y: player.y })
+    isShooting = true // Set the shooting flag
   }
+  //}
 })
 
 window.addEventListener('touchmove', event => {
