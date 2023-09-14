@@ -438,21 +438,17 @@ window.addEventListener('keydown', event => {
 })
 
 document.addEventListener('touchstart', event => {
-  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
   if (game.active) {
     const touch = event.touches[0]
     touchStartX = touch.clientX
     touchStartY = touch.clientY
-    isShooting = true
     player.velocity.x = 0
     player.velocity.y = 0
   }
+  event.preventDefault()
 })
 
 document.addEventListener('touchmove', event => {
-  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
   if (touchStartX === null || touchStartY === null) {
     return
   }
@@ -471,8 +467,6 @@ document.addEventListener('touchmove', event => {
 })
 
 document.addEventListener('touchend', event => {
-  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
   if (game.active) {
     player.velocity.x = 0
     player.velocity.y = 0
