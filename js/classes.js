@@ -34,7 +34,7 @@ class Player {
     }
     //colision detection player vs canvas y
     if (
-      this.y + this.radious + this.velocity.y <= canvas.width &&
+      this.y + this.radious + this.velocity.y <= canvas.height &&
       this.y - this.radious + this.velocity.y >= 0
     ) {
       this.y += this.velocity.y

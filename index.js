@@ -227,6 +227,7 @@ function animate() {
       console.log('Game Over')
       cancelAnimationFrame(animationId)
       clearInterval(intervalId)
+      clearInterval(spawnPowerUpsId)
       audio.death.play()
       game.active = false
       console.log(intervalId)
@@ -389,6 +390,7 @@ window.addEventListener('resize', () => {
   canvas.height = window.innerHeight
   init()
 })
+
 //mute all
 volumeUpEl.addEventListener('click', () => {
   console.log('clicked')
@@ -480,4 +482,13 @@ canvas.addEventListener('touchmove', handleTouchMove)
 
 canvas.addEventListener('touchend', () => {
   touching = false
+})
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    clearInterval(intervalId)
+    clearInterval(spawnPowerUps)
+  } else {
+    spawnEnemies()
+  }
 })
