@@ -438,6 +438,7 @@ window.addEventListener('keydown', event => {
 })
 
 document.addEventListener('touchstart', event => {
+  event.preventDefault()
   if (game.active) {
     const touch = event.touches[0]
     touchStartX = touch.clientX
@@ -445,7 +446,6 @@ document.addEventListener('touchstart', event => {
     player.velocity.x = 0
     player.velocity.y = 0
   }
-  event.preventDefault()
 })
 
 document.addEventListener('touchmove', event => {
