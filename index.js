@@ -459,7 +459,7 @@ window.addEventListener('touchstart', event => {
   shoot({ x, y })
 })
 
-window.addEventListener('touchmove', event => {
+/*window.addEventListener('touchmove', event => {
   event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
   if (touchStartX === null || touchStartY === null) {
@@ -479,13 +479,13 @@ window.addEventListener('touchmove', event => {
   touchStartY = touchY
 })
 
-window.addEventListener('touchend', event => {
+/*window.addEventListener('touchend', event => {
   if (game.active) {
     player.velocity.x = 0
     player.velocity.y = 0
     isShooting = false // Reset the shooting flag
   }
-})
+})*/
 
 /*window.addEventListener('touchstart', event => {
   event.preventDefault()
