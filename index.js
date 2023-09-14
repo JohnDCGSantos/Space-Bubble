@@ -34,6 +34,8 @@ let touchStartX = null
 let touchStartY = null
 let shooting = false
 let isShooting
+let movingPlayer = false
+
 function init() {
   const playerPositionX = canvas.width / 2
   const playerPositiony = canvas.height / 2
@@ -435,7 +437,7 @@ window.addEventListener('keydown', event => {
       break
   }
 })
-window.addEventListener('touchstart', event => {
+/*window.addEventListener('touchstart', event => {
   event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
   // Capture the initial touch position
@@ -476,7 +478,64 @@ window.addEventListener('touchmove', event => {
 window.addEventListener('touchend', () => {
   // Reset the shooting flag when the touch ends
   shooting = false
+})*/
+window.addEventListener('touchstart', event => {
+  event.preventDefault()
+
+  const touch = event.touches[0]
+  touchStartX = touch.clientX
+  touchStartY = touch.clientY
+
+  // Initialize both shooting and movingPlayer flags to false
+  shooting = false
+  movingPlayer = false
 })
+
+window.addEventListener('touchmove', event => {
+  event.preventDefault()
+
+  if (touchStartX === null || touchStartY === null) {
+    return
+  }
+
+  const touch = event.touches[0]
+  const touchX = touch.clientX
+  const touchY = touch.clientY
+
+  const deltaX = touchX - touchStartX
+  const deltaY = touchY - touchStartY
+
+  // Check if the user is primarily moving the player
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    movingPlayer = true
+    shooting = false
+  } else {
+    shooting = false
+    movingPlayer = true
+  }
+
+  if (shooting) {
+    // Handle shooting logic
+    const x = touchX
+    const y = touchY
+    shoot({ x, y })
+  } else if (movingPlayer) {
+    // Handle player movement logic based on deltaX and deltaY
+    // Implement player movement behavior here
+    player.x += deltaX * 1 // Adjust the multiplier as needed
+    player.y += deltaY * 1
+  }
+
+  touchStartX = touchX
+  touchStartY = touchY
+})
+
+window.addEventListener('touchend', () => {
+  // Reset both shooting and movingPlayer flags when the touch ends
+  shooting = false
+  movingPlayer = false
+})
+
 /*window.addEventListener('touchstart', event => {
   //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
 
