@@ -30,11 +30,13 @@ let backgroundParticles = []
 let game = {
   active: false,
 }
+let audioInitialized = false
 let touchStartX = null
 let touchStartY = null
 let shooting = false
 let isShooting
 let movingPlayer = false
+
 window.addEventListener('load', () => {
   function init() {
     const playerPositionX = canvas.width / 2
@@ -320,7 +322,6 @@ window.addEventListener('load', () => {
   }
 
   //events
-  let audioInitialized = false
 
   function shoot({ x, y }) {
     if (game.active) {
@@ -509,9 +510,12 @@ window.addEventListener('touchend', () => {
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       movingPlayer = true
       shooting = false
-    } else {
+    } else if (Math.abs(deltaY) > Math.abs(deltaX)) {
       shooting = false
       movingPlayer = true
+    } else {
+      shooting = true
+      movingPlayer = false
     }
 
     if (shooting) {
@@ -520,9 +524,8 @@ window.addEventListener('touchend', () => {
       const y = touchY
       shoot({ x, y })
     } else if (movingPlayer) {
-      // Handle player movement logic based on deltaX and deltaY
       // Implement player movement behavior here
-      player.x += deltaX * 1 // Adjust the multiplier as needed
+      player.x += deltaX * 1
       player.y += deltaY * 1
     }
 
@@ -535,197 +538,6 @@ window.addEventListener('touchend', () => {
     shooting = false
     movingPlayer = false
   })
-
-  /*window.addEventListener('touchstart', event => {
-  //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
-  // Capture the initial touch position
-  const touch = event.touches[0]
-  touchStartX = touch.clientX
-  touchStartY = touch.clientY
-
-  // Handle shooting
-  if (shooting && !isShooting) {
-    const x = touchStartX // Use the initial touch position for shooting
-    const y = touchStartY
-    shoot({ x, y })
-    isShooting = true // Set the shooting flag
-  }
-})
-
-window.addEventListener('touchmove', event => {
-  //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
-  if (touchStartX === null || touchStartY === null) {
-    return
-  }
-
-  // Calculate the change in touch position for player movement
-  const touch = event.touches[0]
-  const touchX = touch.clientX
-  const touchY = touch.clientY
-
-  const deltaX = touchX - touchStartX
-  const deltaY = touchY - touchStartY
-
-  // Update player position based on touch movement (adjust the multiplier as needed)
-  player.x += deltaX * 1
-  player.y += deltaY * 1
-
-  // Update the initial touch position for the next move event
-  touchStartX = touchX
-  touchStartY = touchY
-})
-
-window.addEventListener('touchend', event => {
-  // Reset the shooting flag when the touch ends
-  isShooting = false
-})*/
-  /*window.addEventListener('touchstart', event => {
-  //event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
-  if (game.active) {
-    const touch = event.touches[0]
-    touchStartX = touch.clientX
-    touchStartY = touch.clientY
-    
-    player.velocity.x = 0
-    player.velocity.y = 0
-
-    // Handle shooting
-    if (shooting && !isShooting) {
-      shoot({ x, y })
-      isShooting = true // Set the shooting flag
-    }
-  }
-})*/
-
-  /*const x = event.touches[0].clientX
-  const y = event.touches[0].clientY
-  shoot({ x, y })
-})*/
-
-  /*window.addEventListener('touchmove', event => {
-  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-
-  if (touchStartX === null || touchStartY === null) {
-    return
-  }
-
-  const touch = event.touches[0]
-  const touchX = touch.clientX
-  const touchY = touch.clientY
-
-  const deltaX = touchX - touchStartX
-  const deltaY = touchY - touchStartY
-
-  player.x += deltaX * 1 // Adjust the multiplier as needed for sensitivity
-  player.y += deltaY * 1
-  touchStartX = touchX
-  touchStartY = touchY
-})
-
-/*window.addEventListener('touchend', event => {
-  if (game.active) {
-    player.velocity.x = 0
-    player.velocity.y = 0
-    isShooting = false // Reset the shooting flag
-  }
-})*/
-
-  /*window.addEventListener('touchstart', event => {
-  event.preventDefault()
-  if (game.active) {
-    const touch = event.touches[0]
-    touchStartX = touch.clientX
-    touchStartY = touch.clientY
-    player.velocity.x = 0
-    player.velocity.y = 0
-  }
-})
-
-document.addEventListener('touchmove', event => {
-  if (touchStartX === null || touchStartY === null) {
-    return
-  }
-
-  const touch = event.touches[0]
-  const touchX = touch.clientX
-  const touchY = touch.clientY
-
-  const deltaX = touchX - touchStartX
-  const deltaY = touchY - touchStartY
-
-  player.x += deltaX * 1 // You can adjust the multiplier as needed for sensitivity
-  player.y += deltaY * 1
-  touchStartX = touchX
-  touchStartY = touchY
-})
-
-document.addEventListener('touchend', event => {
-  if (game.active) {
-    player.velocity.x = 0
-    player.velocity.y = 0
-
-    if (shooting && !isShooting) {
-      shoot({ x: player.x, y: player.y })
-      isShooting = true // Set the shooting flag
-    }
-  }
-})
-function resetShootingFlag() {
-  isShooting = false
-}*/
-
-  /*function handleTouchMove(event) {
-  if (touching) {
-    const touchX = event.touches[0].clientX
-    const touchY = event.touches[0].clientY
-
-    // Calculate the distance from the player's center to the touch position
-    const distance = Math.hypot(touchX - player.x, touchY - player.y)
-
-    // Define a radius within which the player will move
-    const moveRadius = 50 // Adjust this value as needed
-
-    if (distance <= moveRadius) {
-      // Move the player to the touch position
-      player.x = touchX
-      player.y = touchY
-    } else {
-      // Touch elsewhere, trigger shooting
-      shoot({ x: touchX, y: touchY })
-    }
-  }
-}
-
-// Touch events for player movement and shooting (mobile)
-canvas.addEventListener('touchstart', event => {
-  const touchX = event.touches[0].clientX
-  const touchY = event.touches[0].clientY
-  const touchRadius = 30 // Adjust this value as needed
-
-  // Check if the touch is within the player's current position plus a radius
-  if (
-    touchX >= player.x - touchRadius &&
-    touchX <= player.x + touchRadius &&
-    touchY >= player.y - touchRadius &&
-    touchY <= player.y + touchRadius
-  ) {
-    touching = true
-  } else {
-    // Touch elsewhere, trigger shooting
-    shoot({ x: touchX, y: touchY })
-  }
-
-  event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
-})
-
-canvas.addEventListener('touchmove', handleTouchMove)
-
-canvas.addEventListener('touchend', () => {
-  touching = false
-})*/
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {

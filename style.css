@@ -1,18 +1,20 @@
 *{
   touch-action: none;
 }
+
 body{
 margin: 0;
 overflow: hidden;
  font-family: sans-serif;
 }
+
 .score{
   position: absolute;
   color: white;
   padding: 8px;
- 
   user-select: none;
 }
+
 .start-screen h1{
   color:white;
   margin-top: 60px;
@@ -21,11 +23,12 @@ overflow: hidden;
   background-color: rgba(0, 0, 255, 0.7);
   padding: 10px;
   border-radius: 5px;
- 
 }
+
 .start-screen p{
   color:white;
 }
+
 .start-screen,.instructions{
 
     position:absolute;
@@ -45,10 +48,9 @@ overflow: hidden;
     background-image: url('back.png');
     background-size: cover;
     background-repeat: no-repeat;
-    
   }
+
   #startBtn{
-   
     padding: 8px;
     border-radius: 5px;
     width:150px ;
@@ -57,11 +59,11 @@ overflow: hidden;
     border: none;
     color:white;
     cursor:pointer;
-  
    font-size: 20px;
   }
+
 .game-over{
-display: none;
+  display: none;
   position:absolute;
   background-color: white;
   top:50%;
@@ -84,6 +86,7 @@ display: none;
 margin-bottom: 0;
 margin-top: 8px;
 }
+
 .game-over p{
 margin:0;
 font-size: 14px;
@@ -104,33 +107,27 @@ color: gray;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
- 
-  
-
 }
+
 .instructions p, h2 {
   color:white;
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 0px;
- 
 }
+
 .instructions  h2 {
- 
-  margin-top: 5px;
- 
+  margin-top: 5px; 
 }
 
 img.instruction-image{
   width:60px;
-  margin-right: 60px;
- 
+  margin-right: 60px; 
 }
 
 img.Keyboard-Black{
   width:60px;
   margin-left: 60px;
-
 }
 
 img.boss{
@@ -157,10 +154,7 @@ img.boss{
   border: none;
   color:white;
   cursor:pointer;
-
-
  font-size: 15px;
-
 }
 
 #instructionsBtn{
@@ -172,7 +166,5 @@ img.boss{
   border: none;
   color:white;
   cursor:pointer;
- 
  font-size: 20px;
-
 }
