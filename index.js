@@ -481,12 +481,15 @@ window.addEventListener('touchend', () => {
   shooting = false
 })*/
 
+  let touchX = null
+  let touchY = null
   let isTouching = false
 
   const canvas = document.querySelector('canvas')
   canvas.style.touchAction = 'none'
 
   canvas.addEventListener('touchstart', handleTouchStart)
+  canvas.addEventListener('touchmove', handleTouchMove)
   canvas.addEventListener('touchend', handleTouchEnd)
 
   function handleTouchStart(event) {
@@ -494,16 +497,36 @@ window.addEventListener('touchend', () => {
       event.preventDefault()
     }
 
+    const touch = event.touches[0]
+    touchX = touch.clientX
+    touchY = touch.clientY
     isTouching = true
 
     // Lógica de disparo aqui
     if (player) {
-      const touch = event.touches[0]
-      shoot({ x: touch.clientX, y: touch.clientY })
+      shoot({ x: touchX, y: touchY })
+    }
+  }
+
+  function handleTouchMove(event) {
+    if (!isTouching || event.cancelable) {
+      return
     }
 
-    // Iniciar o temporizador para atualizar continuamente a posição do jogador
-    updatePlayerPosition()
+    const touch = event.touches[0]
+    const deltaX = touch.clientX - touchX
+    const deltaY = touch.clientY - touchY
+
+    // Implemente o comportamento de movimento do jogador aqui
+    if (player) {
+      // Ajuste os valores conforme necessário para a velocidade desejada
+      player.x += deltaX * 0.1
+      player.y += deltaY * 0.1
+
+      // Atualize as posições de toque para o próximo cálculo
+      touchX = touch.clientX
+      touchY = touch.clientY
+    }
   }
 
   function handleTouchEnd(event) {
@@ -513,22 +536,6 @@ window.addEventListener('touchend', () => {
 
     isTouching = false
     // Se precisar de lógica de fim de toque, pode adicionar aqui
-  }
-
-  function updatePlayerPosition() {
-    // Temporizador para atualizar continuamente a posição do jogador enquanto o toque estiver ativo
-    const intervalId = setInterval(() => {
-      if (!isTouching) {
-        clearInterval(intervalId) // Parar o temporizador quando o toque terminar
-        return
-      }
-
-      // Lógica de movimento do jogador aqui
-      const touch = event.touches[0]
-      const canvasRect = canvas.getBoundingClientRect()
-      player.x = touch.clientX - canvasRect.left
-      player.y = touch.clientY - canvasRect.top
-    }, 16) // Atualizar a cada 16 milissegundos (aproximadamente 60 FPS)
   }
 
   // Restante do seu código...
