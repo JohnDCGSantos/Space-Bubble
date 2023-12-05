@@ -490,6 +490,11 @@ window.addEventListener('touchend', () => {
     const touch = event.touches[0]
     touchStartX = touch.clientX
     touchStartY = touch.clientY
+
+    // Implemente a lógica de disparo aqui
+    const x = touchStartX
+    const y = touchStartY
+    shoot({ x, y })
   })
 
   window.addEventListener('touchmove', event => {
