@@ -168,3 +168,8 @@ img.boss{
   cursor:pointer;
  font-size: 20px;
 }
+
+.canvas{
+  touch-action: manipulation;
+
+}

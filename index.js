@@ -485,6 +485,7 @@ window.addEventListener('touchend', () => {
   let touchStartY = null
 
   const canvas = document.querySelector('canvas')
+  canvas.style.touchAction = 'none' // Desativa o processamento padrão de toques pelo navegador
 
   canvas.addEventListener('touchstart', event => {
     event.preventDefault()
