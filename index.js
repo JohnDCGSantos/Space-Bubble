@@ -519,7 +519,8 @@ window.addEventListener('touchend', () => {
 
     // Implemente o comportamento de movimento do jogador aqui
     if (player) {
-      player.x += deltaX * 0.1 // Ajuste o fator de multiplicação conforme necessário
+      // Ajuste os valores conforme necessário para a velocidade desejada
+      player.x += deltaX * 0.1
       player.y += deltaY * 0.1
     }
 
