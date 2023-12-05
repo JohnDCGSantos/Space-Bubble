@@ -481,8 +481,7 @@ window.addEventListener('touchend', () => {
   shooting = false
 })*/
 
-  let touchStartX = null
-  let touchStartY = null
+  let isTouching = false
 
   const canvas = document.querySelector('canvas')
   canvas.style.touchAction = 'none'
@@ -497,40 +496,27 @@ window.addEventListener('touchend', () => {
     }
 
     const touch = event.touches[0]
-    touchStartX = touch.clientX
-    touchStartY = touch.clientY
+    isTouching = true
 
     // Lógica de disparo aqui
     if (player) {
-      shoot({ x: touchStartX, y: touchStartY })
+      shoot({ x: touch.clientX, y: touch.clientY })
     }
   }
 
   function handleTouchMove(event) {
-    if (event.cancelable) {
-      event.preventDefault()
-    }
-
-    if (touchStartX === null || touchStartY === null) {
+    if (!isTouching || event.cancelable) {
       return
     }
 
     const touch = event.touches[0]
-    const touchX = touch.clientX
-    const touchY = touch.clientY
-
-    const deltaX = touchX - touchStartX
-    const deltaY = touchY - touchStartY
 
     // Implemente o comportamento de movimento do jogador aqui
     if (player) {
       // Ajuste os valores conforme necessário para a velocidade desejada
-      player.x += deltaX * 0.1
-      player.y += deltaY * 0.1
+      player.x = touch.clientX
+      player.y = touch.clientY
     }
-
-    touchStartX = touchX
-    touchStartY = touchY
   }
 
   function handleTouchEnd(event) {
@@ -538,9 +524,9 @@ window.addEventListener('touchend', () => {
       event.preventDefault()
     }
 
+    isTouching = false
+
     // Se precisar de lógica de fim de toque, pode adicionar aqui
-    touchStartX = null
-    touchStartY = null
   }
 
   /*window.addEventListener('touchstart', event => {
