@@ -481,62 +481,74 @@ window.addEventListener('touchend', () => {
   shooting = false
 })*/
 
-  let touchX = null
-  let touchY = null
-  let isTouching = false
+  let touchStartX = null
+  let touchStartY = null
 
   const canvas = document.querySelector('canvas')
   canvas.style.touchAction = 'none'
 
-  canvas.addEventListener('touchstart', handleTouchStart)
-  canvas.addEventListener('touchmove', handleTouchMove)
-  canvas.addEventListener('touchend', handleTouchEnd)
-
-  function handleTouchStart(event) {
+  canvas.addEventListener('touchstart', event => {
     if (event.cancelable) {
       event.preventDefault()
     }
 
     const touch = event.touches[0]
-    touchX = touch.clientX
-    touchY = touch.clientY
-    isTouching = true
-  }
+    touchStartX = touch.clientX
+    touchStartY = touch.clientY
 
-  function handleTouchMove(event) {
-    if (!isTouching || event.cancelable) {
+    // Lógica de disparo aqui
+    if (player) {
+      shoot({ x: touchStartX, y: touchStartY })
+    }
+  })
+
+  window.addEventListener('touchmove', event => {
+    event.preventDefault()
+
+    if (touchStartX === null || touchStartY === null) {
       return
     }
 
     const touch = event.touches[0]
-    const deltaX = touch.clientX - touchX
-    const deltaY = touch.clientY - touchY
+    const touchX = touch.clientX
+    const touchY = touch.clientY
 
-    // Implemente o comportamento de movimento do jogador aqui
-    if (player) {
-      // Ajuste os valores conforme necessário para a velocidade desejada
-      player.x += deltaX * 0.1
-      player.y += deltaY * 0.1
+    const deltaX = touchX - touchStartX
+    const deltaY = touchY - touchStartY
 
-      // Atualize as posições de toque para o próximo cálculo
-      touchX = touch.clientX
-      touchY = touch.clientY
-    }
-  }
-
-  function handleTouchEnd(event) {
-    if (event.cancelable) {
-      event.preventDefault()
+    // Check if the user is primarily moving the player
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      movingPlayer = true
+      shooting = false
+    } else if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      shooting = false
+      movingPlayer = true
+    } else {
+      shooting = true
+      movingPlayer = false
     }
 
-    isTouching = false
-    // Lógica de disparo aqui, ocorrendo apenas quando o dedo é levantado
-    if (player) {
-      shoot({ x: touchX, y: touchY })
+    if (shooting) {
+      // Handle shooting logic
+      const x = touchX
+      const y = touchY
+      shoot({ x, y })
+    } else if (movingPlayer) {
+      // Implement player movement behavior here
+      player.x += deltaX * 1
+      player.y += deltaY * 1
     }
-  }
 
-  // Restante do seu código...
+    touchStartX = touchX
+    touchStartY = touchY
+  })
+
+  window.addEventListener('touchend', () => {
+    // Reset both shooting and movingPlayer flags when the touch ends
+    shooting = false
+    movingPlayer = false
+  })
+  // Se precisar de lógica de fim de toque, pode adicionar aqui
 
   /*window.addEventListener('touchstart', event => {
     event.preventDefault()
