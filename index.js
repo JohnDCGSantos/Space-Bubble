@@ -503,7 +503,9 @@ window.addEventListener('touchend', () => {
   })
 
   window.addEventListener('touchmove', event => {
-    event.preventDefault()
+    if (event.cancelable) {
+      event.preventDefault()
+    }
 
     if (touchStartX === null || touchStartY === null) {
       return
@@ -545,6 +547,7 @@ window.addEventListener('touchend', () => {
 
   window.addEventListener('touchend', () => {
     // Reset both shooting and movingPlayer flags when the touch ends
+
     shooting = false
     movingPlayer = false
   })
