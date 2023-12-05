@@ -483,29 +483,16 @@ window.addEventListener('touchend', () => {
 
   let touchStartX = null
   let touchStartY = null
-  let shooting = false
 
-  window.addEventListener('touchstart', event => {
+  document.querySelector('.content').addEventListener('touchstart', event => {
     event.preventDefault()
 
     const touch = event.touches[0]
     touchStartX = touch.clientX
     touchStartY = touch.clientY
-
-    // Se o toque começou diretamente sobre o jogador, mude para o modo de disparo
-    if (
-      touchStartX >= player.x &&
-      touchStartX <= player.x + player.width &&
-      touchStartY >= player.y &&
-      touchStartY <= player.y + player.height
-    ) {
-      shooting = true
-    } else {
-      shooting = false
-    }
   })
 
-  window.addEventListener('touchmove', event => {
+  document.querySelector('.content').addEventListener('touchmove', event => {
     event.preventDefault()
 
     if (touchStartX === null || touchStartY === null) {
@@ -519,8 +506,8 @@ window.addEventListener('touchend', () => {
     const deltaX = touchX - touchStartX
     const deltaY = touchY - touchStartY
 
-    if (!shooting) {
-      // Implemente o comportamento de movimento do jogador aqui
+    // Implemente o comportamento de movimento do jogador aqui
+    if (player) {
       player.x += deltaX * 1
       player.y += deltaY * 1
     }
@@ -529,15 +516,17 @@ window.addEventListener('touchend', () => {
     touchStartY = touchY
   })
 
-  window.addEventListener('touchend', () => {
-    // Se estiver no modo de disparo, atire e volte para o modo de movimento
-    if (shooting) {
-      const touch = event.changedTouches[0]
-      const x = touch.clientX
-      const y = touch.clientY
-      shoot({ x, y })
-      shooting = false
-    }
+  document.querySelector('.content').addEventListener('touchend', event => {
+    event.preventDefault()
+
+    // Lógica de disparo aqui
+    const touch = event.changedTouches[0]
+    const x = touch.clientX
+    const y = touch.clientY
+    shoot({ x, y })
+
+    touchStartX = null
+    touchStartY = null
   })
 
   /*window.addEventListener('touchstart', event => {
