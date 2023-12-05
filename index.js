@@ -524,7 +524,7 @@ window.addEventListener('touchend', () => {
       shooting = false
       movingPlayer = true
     } else {
-      shooting = true
+      shooting = false
       movingPlayer = false
     }
 
