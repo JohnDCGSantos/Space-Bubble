@@ -60,6 +60,7 @@ overflow: hidden;
     color:white;
     cursor:pointer;
    font-size: 20px;
+   margin-bottom: 30px;
   }
 
 .game-over{
@@ -172,4 +173,10 @@ img.boss{
 .canvas{
   touch-action: manipulation;
 
+}
+
+.btns{
+  display: flex;
+  flex-direction: column;
+  
 }
