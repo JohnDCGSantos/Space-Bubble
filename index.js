@@ -485,30 +485,57 @@ window.addEventListener('touchend', () => {
   let touchStartY = null
 
   const canvas = document.querySelector('canvas')
-  canvas.style.touchAction = 'none' // Desativa o processamento padrão de toques pelo navegador
+  canvas.style.touchAction = 'none'
 
-  canvas.addEventListener('touchstart', event => {
-    event.preventDefault()
+  canvas.addEventListener('touchstart', handleTouchStart)
+  canvas.addEventListener('touchmove', handleTouchMove)
+  canvas.addEventListener('touchend', handleTouchEnd)
+
+  function handleTouchStart(event) {
+    if (event.cancelable) {
+      event.preventDefault()
+    }
 
     const touch = event.touches[0]
     touchStartX = touch.clientX
     touchStartY = touch.clientY
+  }
 
-    // Lógica de disparo aqui
-    if (player) {
-      shoot({ x: touchStartX, y: touchStartY })
+  function handleTouchMove(event) {
+    if (event.cancelable) {
+      event.preventDefault()
     }
-  })
 
-  canvas.addEventListener('touchmove', event => {
-    event.preventDefault()
-    // Se precisar de lógica de movimento, pode adicionar aqui
-  })
+    if (touchStartX === null || touchStartY === null) {
+      return
+    }
 
-  canvas.addEventListener('touchend', event => {
-    event.preventDefault()
+    const touch = event.touches[0]
+    const touchX = touch.clientX
+    const touchY = touch.clientY
+
+    const deltaX = touchX - touchStartX
+    const deltaY = touchY - touchStartY
+
+    // Implemente o comportamento de movimento do jogador aqui
+    if (player) {
+      player.x += deltaX * 0.1 // Ajuste o fator de multiplicação conforme necessário
+      player.y += deltaY * 0.1
+    }
+
+    touchStartX = touchX
+    touchStartY = touchY
+  }
+
+  function handleTouchEnd(event) {
+    if (event.cancelable) {
+      event.preventDefault()
+    }
+
     // Se precisar de lógica de fim de toque, pode adicionar aqui
-  })
+    touchStartX = null
+    touchStartY = null
+  }
 
   /*window.addEventListener('touchstart', event => {
     event.preventDefault()
