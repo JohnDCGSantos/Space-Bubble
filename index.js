@@ -487,7 +487,6 @@ window.addEventListener('touchend', () => {
   canvas.style.touchAction = 'none'
 
   canvas.addEventListener('touchstart', handleTouchStart)
-  canvas.addEventListener('touchmove', handleTouchMove)
   canvas.addEventListener('touchend', handleTouchEnd)
 
   function handleTouchStart(event) {
@@ -495,31 +494,16 @@ window.addEventListener('touchend', () => {
       event.preventDefault()
     }
 
-    const touch = event.touches[0]
     isTouching = true
 
     // Lógica de disparo aqui
     if (player) {
+      const touch = event.touches[0]
       shoot({ x: touch.clientX, y: touch.clientY })
     }
-  }
 
-  function handleTouchMove(event) {
-    if (!isTouching || event.cancelable) {
-      return
-    }
-
-    const touch = event.touches[0]
-
-    // Implemente o comportamento de movimento do jogador aqui
-    if (player) {
-      const canvasRect = canvas.getBoundingClientRect()
-      player.x = touch.clientX - canvasRect.left
-      player.y = touch.clientY - canvasRect.top
-
-      // Lógica de disparo aqui
-      shoot({ x: touch.clientX, y: touch.clientY })
-    }
+    // Iniciar o temporizador para atualizar continuamente a posição do jogador
+    updatePlayerPosition()
   }
 
   function handleTouchEnd(event) {
@@ -529,6 +513,22 @@ window.addEventListener('touchend', () => {
 
     isTouching = false
     // Se precisar de lógica de fim de toque, pode adicionar aqui
+  }
+
+  function updatePlayerPosition() {
+    // Temporizador para atualizar continuamente a posição do jogador enquanto o toque estiver ativo
+    const intervalId = setInterval(() => {
+      if (!isTouching) {
+        clearInterval(intervalId) // Parar o temporizador quando o toque terminar
+        return
+      }
+
+      // Lógica de movimento do jogador aqui
+      const touch = event.touches[0]
+      const canvasRect = canvas.getBoundingClientRect()
+      player.x = touch.clientX - canvasRect.left
+      player.y = touch.clientY - canvasRect.top
+    }, 16) // Atualizar a cada 16 milissegundos (aproximadamente 60 FPS)
   }
 
   // Restante do seu código...
