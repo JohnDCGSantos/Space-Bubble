@@ -484,7 +484,9 @@ window.addEventListener('touchend', () => {
   let touchStartX = null
   let touchStartY = null
 
-  document.querySelector('.content').addEventListener('touchstart', event => {
+  const canvas = document.querySelector('canvas')
+
+  canvas.addEventListener('touchstart', event => {
     event.preventDefault()
 
     const touch = event.touches[0]
@@ -492,7 +494,7 @@ window.addEventListener('touchend', () => {
     touchStartY = touch.clientY
   })
 
-  document.querySelector('.content').addEventListener('touchmove', event => {
+  canvas.addEventListener('touchmove', event => {
     event.preventDefault()
 
     if (touchStartX === null || touchStartY === null) {
@@ -516,7 +518,7 @@ window.addEventListener('touchend', () => {
     touchStartY = touchY
   })
 
-  document.querySelector('.content').addEventListener('touchend', event => {
+  canvas.addEventListener('touchend', event => {
     event.preventDefault()
 
     // Lógica de disparo aqui
