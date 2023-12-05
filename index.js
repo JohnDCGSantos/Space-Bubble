@@ -504,21 +504,27 @@ window.addEventListener('touchend', () => {
     }
   }
 
-  function handleTouchMove(event) {
-    if (!isTouching || event.cancelable) {
+  window.addEventListener('touchmove', event => {
+    event.preventDefault() // Prevent default touch behavior (e.g., scrolling)
+
+    if (touchStartX === null || touchStartY === null) {
       return
     }
-
     const touch = event.touches[0]
+    const touchX = touch.clientX
+    const touchY = touch.clientY
 
-    // Implemente o comportamento de movimento do jogador aqui
-    if (player) {
-      // Ajuste os valores conforme necessário para a velocidade desejada
-      const canvasRect = canvas.getBoundingClientRect()
-      player.x = touch.clientX - canvasRect.left
-      player.y = touch.clientY - canvasRect.top
-    }
-  }
+    const deltaX = touchX - touchStartX
+    const deltaY = touchY - touchStartY
+
+    // Update player position based on touch movement (adjust the multiplier as needed)
+    player.x += deltaX * 1
+    player.y += deltaY * 1
+
+    // Update the initial touch position for the next move event
+    touchStartX = touchX
+    touchStartY = touchY
+  })
   function handleTouchEnd(event) {
     if (event.cancelable) {
       event.preventDefault()
