@@ -480,7 +480,47 @@ window.addEventListener('touchend', () => {
   // Reset the shooting flag when the touch ends
   shooting = false
 })*/
+
+  let touchStartX = null
+  let touchStartY = null
+
   window.addEventListener('touchstart', event => {
+    event.preventDefault()
+
+    const touch = event.touches[0]
+    touchStartX = touch.clientX
+    touchStartY = touch.clientY
+  })
+
+  window.addEventListener('touchmove', event => {
+    event.preventDefault()
+
+    if (touchStartX === null || touchStartY === null) {
+      return
+    }
+
+    const touch = event.touches[0]
+    const touchX = touch.clientX
+    const touchY = touch.clientY
+
+    const deltaX = touchX - touchStartX
+    const deltaY = touchY - touchStartY
+
+    // Implemente o comportamento de movimento do jogador aqui
+    player.x += deltaX * 1
+    player.y += deltaY * 1
+
+    touchStartX = touchX
+    touchStartY = touchY
+  })
+
+  window.addEventListener('touchend', () => {
+    // Redefina os sinalizadores de movimento do jogador quando o toque termina
+    touchStartX = null
+    touchStartY = null
+  })
+
+  /*window.addEventListener('touchstart', event => {
     event.preventDefault()
 
     const touch = event.touches[0]
@@ -537,7 +577,7 @@ window.addEventListener('touchend', () => {
     // Reset both shooting and movingPlayer flags when the touch ends
     shooting = false
     movingPlayer = false
-  })
+  })*/
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
