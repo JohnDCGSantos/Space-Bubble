@@ -481,40 +481,65 @@ window.addEventListener('touchend', () => {
   shooting = false
 })*/
 
-  let touchStartX = null
-  let touchStartY = null
+  let touchX = null
+  let touchY = null
+  let isTouching = false
 
   const canvas = document.querySelector('canvas')
   canvas.style.touchAction = 'none'
 
-  canvas.addEventListener('touchstart', event => {
+  canvas.addEventListener('touchstart', handleTouchStart)
+  canvas.addEventListener('touchmove', handleTouchMove)
+  canvas.addEventListener('touchend', handleTouchEnd)
+
+  function handleTouchStart(event) {
     if (event.cancelable) {
       event.preventDefault()
     }
 
     const touch = event.touches[0]
-    touchStartX = touch.clientX
-    touchStartY = touch.clientY
+    touchX = touch.clientX
+    touchY = touch.clientY
+    isTouching = true
 
     // Lógica de disparo aqui
     if (player) {
-      shoot({ x: touchStartX, y: touchStartY })
+      shoot({ x: touchX, y: touchY })
     }
-  })
+  }
 
-  canvas.addEventListener('touchmove', event => {
+  function handleTouchMove(event) {
+    if (!isTouching || event.cancelable) {
+      return
+    }
+
+    const touch = event.touches[0]
+    const deltaX = touch.clientX - touchX
+    const deltaY = touch.clientY - touchY
+
+    // Implemente o comportamento de movimento do jogador aqui
+    if (player) {
+      // Ajuste os valores conforme necessário para a velocidade desejada
+      player.x += deltaX * 0.1
+      player.y += deltaY * 0.1
+
+      // Atualize as posições de toque para o próximo cálculo
+      touchX = touch.clientX
+      touchY = touch.clientY
+    }
+  }
+
+  function handleTouchEnd(event) {
     if (event.cancelable) {
       event.preventDefault()
     }
-    // Se precisar de lógica de movimento, pode adicionar aqui
-  })
 
-  canvas.addEventListener('touchend', event => {
-    if (event.cancelable) {
-      event.preventDefault()
-    }
+    isTouching = false
     // Se precisar de lógica de fim de toque, pode adicionar aqui
-  })
+  }
+
+  // Restante do seu código...
+
   /*window.addEventListener('touchstart', event => {
     event.preventDefault()
 
