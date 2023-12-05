@@ -551,7 +551,6 @@ window.addEventListener('touchend', () => {
     shooting = false
     movingPlayer = false
   })
-  // Se precisar de lógica de fim de toque, pode adicionar aqui
 
   /*window.addEventListener('touchstart', event => {
     event.preventDefault()
