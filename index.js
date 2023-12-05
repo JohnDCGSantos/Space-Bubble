@@ -514,11 +514,11 @@ window.addEventListener('touchend', () => {
     // Implemente o comportamento de movimento do jogador aqui
     if (player) {
       // Ajuste os valores conforme necessário para a velocidade desejada
-      player.x = touch.clientX
-      player.y = touch.clientY
+      const canvasRect = canvas.getBoundingClientRect()
+      player.x = touch.clientX - canvasRect.left
+      player.y = touch.clientY - canvasRect.top
     }
   }
-
   function handleTouchEnd(event) {
     if (event.cancelable) {
       event.preventDefault()
