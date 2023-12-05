@@ -483,6 +483,7 @@ window.addEventListener('touchend', () => {
 
   let touchStartX = null
   let touchStartY = null
+  let shooting = false
 
   window.addEventListener('touchstart', event => {
     event.preventDefault()
@@ -491,14 +492,16 @@ window.addEventListener('touchend', () => {
     touchStartX = touch.clientX
     touchStartY = touch.clientY
 
-    // Se o toque começou diretamente sobre o jogador, dispare
+    // Se o toque começou diretamente sobre o jogador, mude para o modo de disparo
     if (
       touchStartX >= player.x &&
       touchStartX <= player.x + player.width &&
       touchStartY >= player.y &&
       touchStartY <= player.y + player.height
     ) {
-      shoot({ x: touchStartX, y: touchStartY })
+      shooting = true
+    } else {
+      shooting = false
     }
   })
 
@@ -516,18 +519,25 @@ window.addEventListener('touchend', () => {
     const deltaX = touchX - touchStartX
     const deltaY = touchY - touchStartY
 
-    // Implemente o comportamento de movimento do jogador aqui
-    player.x += deltaX * 1
-    player.y += deltaY * 1
+    if (!shooting) {
+      // Implemente o comportamento de movimento do jogador aqui
+      player.x += deltaX * 1
+      player.y += deltaY * 1
+    }
 
     touchStartX = touchX
     touchStartY = touchY
   })
 
   window.addEventListener('touchend', () => {
-    // Redefina os sinalizadores de movimento do jogador quando o toque termina
-    touchStartX = null
-    touchStartY = null
+    // Se estiver no modo de disparo, atire e volte para o modo de movimento
+    if (shooting) {
+      const touch = event.changedTouches[0]
+      const x = touch.clientX
+      const y = touch.clientY
+      shoot({ x, y })
+      shooting = false
+    }
   })
 
   /*window.addEventListener('touchstart', event => {
