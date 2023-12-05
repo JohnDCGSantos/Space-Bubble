@@ -499,6 +499,11 @@ window.addEventListener('touchend', () => {
     const touch = event.touches[0]
     touchStartX = touch.clientX
     touchStartY = touch.clientY
+
+    // Lógica de disparo aqui
+    if (player) {
+      shoot({ x: touchStartX, y: touchStartY })
+    }
   }
 
   function handleTouchMove(event) {
