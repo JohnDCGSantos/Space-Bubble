@@ -501,11 +501,6 @@ window.addEventListener('touchend', () => {
     touchX = touch.clientX
     touchY = touch.clientY
     isTouching = true
-
-    // Lógica de disparo aqui
-    if (player) {
-      shoot({ x: touchX, y: touchY })
-    }
   }
 
   function handleTouchMove(event) {
@@ -535,7 +530,10 @@ window.addEventListener('touchend', () => {
     }
 
     isTouching = false
-    // Se precisar de lógica de fim de toque, pode adicionar aqui
+    // Lógica de disparo aqui, ocorrendo apenas quando o dedo é levantado
+    if (player) {
+      shoot({ x: touchX, y: touchY })
+    }
   }
 
   // Restante do seu código...
