@@ -491,10 +491,15 @@ window.addEventListener('touchend', () => {
     touchStartX = touch.clientX
     touchStartY = touch.clientY
 
-    // Implemente a lógica de disparo aqui
-    const x = touchStartX
-    const y = touchStartY
-    shoot({ x, y })
+    // Se o toque começou diretamente sobre o jogador, dispare
+    if (
+      touchStartX >= player.x &&
+      touchStartX <= player.x + player.width &&
+      touchStartY >= player.y &&
+      touchStartY <= player.y + player.height
+    ) {
+      shoot({ x: touchStartX, y: touchStartY })
+    }
   })
 
   window.addEventListener('touchmove', event => {
